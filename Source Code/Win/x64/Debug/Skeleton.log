@@ -1,0 +1,15 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Skeleton.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Vibrancy.cpp
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(461,27): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(467,31): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(473,29): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(436,9): warning C4101: 'multiplier': unreferenced local variable
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(532,27): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(538,31): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(544,29): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(507,9): warning C4101: 'multiplier': unreferenced local variable
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(565,37): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(566,41): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(567,39): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(568,41): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+  Skeleton.vcxproj -> C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\NT Productions\Vibrancy.aex

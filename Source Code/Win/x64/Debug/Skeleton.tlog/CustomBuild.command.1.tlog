@@ -1,0 +1,4 @@
+^E:\PLUGINS\LEARNING\ADOBE AFTER EFFECTS CC 15.0 WIN SDK\EXAMPLES\TEMPLATE\SKELETON\SKELETONPIPL.R
+cl /I "E:\Plugins\Learning\Adobe After Effects CC 15.0 Win SDK\Examples\Template\Skeleton\Win\..\..\..\Headers" /EP ".."\\"SkeletonPiPL.r" > "x64\Debug\"\\"SkeletonPiPL.rr"
+"E:\Plugins\Learning\Adobe After Effects CC 15.0 Win SDK\Examples\Template\Skeleton\Win\..\..\..\Resources\PiPLTool" "x64\Debug\SkeletonPiPL.rr" "x64\Debug\SkeletonPiPL.rrc"
+cl /D "MSWindows" /EP x64\Debug\SkeletonPiPL.rrc >               "E:\Plugins\Learning\Adobe After Effects CC 15.0 Win SDK\Examples\Template\Skeleton\Win\"\\"SkeletonPiPL".rc
