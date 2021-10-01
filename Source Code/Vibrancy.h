@@ -56,6 +56,8 @@ typedef short int			int16;
 #include "AE_GeneralPlug.h"
 #include "AEFX_ChannelDepthTpl.h"
 #include "AEGP_SuiteHandler.h"
+#include "PrSDKAESupport.h"
+#include "AEFX_SuiteHelper.h"
 
 #include "Vibrancy_Strings.h"
 
@@ -113,5 +115,23 @@ extern "C" {
 		void			*extra);
 
 }
+
+typedef struct {
+	A_u_char	blue, green, red, alpha;
+} PF_Pixel_BGRA_8u;
+
+typedef struct {
+	A_u_char	Pr, Pb, luma, alpha;
+} PF_Pixel_VUYA_8u;
+
+typedef struct {
+	PF_FpShort	blue, green, red, alpha;
+} PF_Pixel_BGRA_32f;
+
+typedef struct {
+	PF_FpShort	Pr, Pb, luma, alpha;
+} PF_Pixel_VUYA_32f;
+
+
 
 #endif // VIBRANCY_H

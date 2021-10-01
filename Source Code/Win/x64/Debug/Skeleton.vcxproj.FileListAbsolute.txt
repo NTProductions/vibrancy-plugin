@@ -1,2 +1,1 @@
-C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\NT Productions\Vibrancy.pdb
 E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\x64\Debug\Vibrancy.pdb

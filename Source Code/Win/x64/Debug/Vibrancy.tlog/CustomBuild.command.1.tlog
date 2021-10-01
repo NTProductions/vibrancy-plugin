@@ -1,4 +1,4 @@
-^E:\PLUGINS\LEARNING\AFTEREFFECTSSDK 17.1.2\EXAMPLES\NT PRODUCTIONS\VIBRANCY\VIBRANCYPIPL.R
-cl /I "E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\..\..\..\Headers" /EP ".."\\"VibrancyPiPL.r" > "x64\Debug\"\\"VibrancyPiPL.rr"
-"E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\..\..\..\Resources\PiPLTool" "x64\Debug\VibrancyPiPL.rr" "x64\Debug\VibrancyPiPL.rrc"
-cl /D "MSWindows" /EP x64\Debug\VibrancyPiPL.rrc >               "E:\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\"\\"VibrancyPiPL".rc
+^F:\FREELANCER PROJECTS\PLUGINS\LEARNING\AFTEREFFECTSSDK 17.1.2\EXAMPLES\NT PRODUCTIONS\VIBRANCY\VIBRANCYPIPL.R
+cl /I "F:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\..\..\..\Headers" /EP ".."\\"VibrancyPiPL.r" > "x64\Debug\"\\"VibrancyPiPL.rr"
+"F:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\..\..\..\Resources\PiPLTool" "x64\Debug\VibrancyPiPL.rr" "x64\Debug\VibrancyPiPL.rrc"
+cl /D "MSWindows" /EP x64\Debug\VibrancyPiPL.rrc >               "F:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Win\"\\"VibrancyPiPL".rc

@@ -75,6 +75,18 @@ GlobalSetup (
 										BUILD_VERSION);
 
 	out_data->out_flags =  PF_OutFlag_DEEP_COLOR_AWARE;	// just 16bpc, not 32bpc
+
+	if (in_data->appl_id == 'PrMr') {
+		AEFX_SuiteScoper<PF_PixelFormatSuite1> pixelFormatSuite = AEFX_SuiteScoper<PF_PixelFormatSuite1>(in_data, kPFPixelFormatSuite, kPFPixelFormatSuiteVersion1, out_data);
+
+		// add supported pixel formats
+		(*pixelFormatSuite->ClearSupportedPixelFormats)(in_data->effect_ref);
+
+		(*pixelFormatSuite->AddSupportedPixelFormat) (in_data->effect_ref, PrPixelFormat_VUYA_4444_32f);
+		(*pixelFormatSuite->AddSupportedPixelFormat) (in_data->effect_ref, PrPixelFormat_BGRA_4444_32f);
+		(*pixelFormatSuite->AddSupportedPixelFormat) (in_data->effect_ref, PrPixelFormat_VUYA_4444_32f);
+		(*pixelFormatSuite->AddSupportedPixelFormat) (in_data->effect_ref, PrPixelFormat_BGRA_4444_8u);
+	}
 	
 	return PF_Err_NONE;
 }
@@ -105,7 +117,7 @@ ParamsSetup (
 							0.0, 
 							100.0, 
 							100.0,
-							PF_Precision_TENTHS,
+							PF_Precision_TEN_THOUSANDTHS,
 							0,
 							0,
 							VIBRANCE_DISK_ID);
@@ -448,7 +460,81 @@ TintFunc8(
 		blueChannelB = true;
 	}
 
-	if (inP->alpha > 0) {
+		if (inP->alpha > 0) {
+			/*multiplier = colour.red / (inP->red+1);
+			outP->red = A_u_char(colour.red * multiplier);
+			multiplier = colour.green / (inP->green+1);
+			outP->green = A_u_char(colour.green * multiplier);
+			multiplier = colour.blue / (inP->blue+1);
+			outP->blue = A_u_char(colour.blue * multiplier);
+			outP->alpha = inP->alpha;*/
+
+			if (redChannelB == true) {
+				outP->red = colour.red * vibrance;
+			}
+			else {
+				outP->red = colour.red;
+			}
+			if (greenChannelB == true) {
+				outP->green = colour.green * vibrance;
+			}
+			else {
+				outP->green = colour.green;
+			}
+			if (blueChannelB == true) {
+				outP->blue = colour.blue * vibrance;
+			}
+			else {
+				outP->blue = colour.blue;
+			}
+
+			outP->alpha = inP->alpha;
+
+		}
+		else {
+			outP->red = inP->red;
+			outP->green = inP->green;
+			outP->blue = inP->blue;
+			outP->alpha = inP->alpha;
+		}
+
+	
+	
+
+	return err;
+}
+
+static PF_Err
+TintFuncBGRA8(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel8* inP,
+	PF_Pixel8* outP)
+{
+	PF_Err		err = PF_Err_NONE;
+
+	VibrancyInfo* giP = reinterpret_cast<VibrancyInfo*>(refcon);
+	double gamma = giP->gamma;
+	PF_Pixel8 colour = giP->colour8;
+	double	  vibrance = (giP->vibrance * .01);
+
+	A_long	multiplier;
+	bool redChannelB = false;
+	bool greenChannelB = false;
+	bool blueChannelB = false;
+
+	if (isImportantColourChannel8(colour, 1)) {
+		redChannelB = true;
+	}
+	if (isImportantColourChannel8(colour, 2)) {
+		greenChannelB = true;
+	}
+	if (isImportantColourChannel8(colour, 3)) {
+		blueChannelB = true;
+	}
+
+	if (inP->blue > 0) {
 		/*multiplier = colour.red / (inP->red+1);
 		outP->red = A_u_char(colour.red * multiplier);
 		multiplier = colour.green / (inP->green+1);
@@ -458,25 +544,25 @@ TintFunc8(
 		outP->alpha = inP->alpha;*/
 
 		if (redChannelB == true) {
-			outP->red = colour.red * vibrance;
+			outP->green = colour.red * vibrance;
 		}
 		else {
-			outP->red = colour.red;
+			outP->green = colour.red;
 		}
 		if (greenChannelB == true) {
-			outP->green = colour.green * vibrance;
+			outP->red = colour.green * vibrance;
 		}
 		else {
-			outP->green = colour.green;
+			outP->red = colour.green;
 		}
 		if (blueChannelB == true) {
-			outP->blue = colour.blue * vibrance;
+			outP->alpha = colour.blue * vibrance;
 		}
 		else {
-			outP->blue = colour.blue;
+			outP->alpha = colour.blue;
 		}
 
-		outP->alpha = inP->alpha;
+		outP->blue = inP->blue;
 
 	}
 	else {
@@ -485,6 +571,110 @@ TintFunc8(
 		outP->blue = inP->blue;
 		outP->alpha = inP->alpha;
 	}
+
+
+
+
+	return err;
+}
+
+static PF_Err
+TintFuncVUYA32(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel32* inP,
+	PF_Pixel32* outP)
+{
+	PF_Err		err = PF_Err_NONE;
+
+	VibrancyInfo* giP = reinterpret_cast<VibrancyInfo*>(refcon);
+	double gamma = giP->gamma;
+	PF_Pixel8 colour = giP->colour8;
+	PF_Pixel32 colour32;
+	colour32.red = colour.red * .0039;
+	colour32.green = colour.green * .0039;
+	colour32.blue = colour.blue * .0039;
+	colour32.alpha = colour.alpha * .0039;
+	double	  vibrance = (giP->vibrance * .01);
+
+	PF_Pixel_VUYA_32f convertedPixel;
+	convertedPixel.luma = inP->green;
+	convertedPixel.Pb = inP->red;
+	convertedPixel.Pr = inP->alpha;
+	convertedPixel.alpha = inP->blue;
+
+	PF_FpLong R = convertedPixel.luma + 1.403 * convertedPixel.Pr;
+	PF_FpLong G = convertedPixel.luma - 0.344 * convertedPixel.Pb - 0.714 * convertedPixel.Pr;
+	PF_FpLong B = convertedPixel.luma + 1.77 * convertedPixel.Pb;
+
+	A_long	multiplier;
+	bool redChannelB = false;
+	bool greenChannelB = false;
+	bool blueChannelB = false;
+
+	PF_FpLong newR, newG, newB;
+
+	if (isImportantColourChannel8(colour, 1)) {
+		redChannelB = true;
+	}
+	if (isImportantColourChannel8(colour, 2)) {
+		greenChannelB = true;
+	}
+	if (isImportantColourChannel8(colour, 3)) {
+		blueChannelB = true;
+	}
+
+	if (inP->blue > 0) {
+		/*multiplier = colour.red / (inP->red+1);
+		outP->red = A_u_char(colour.red * multiplier);
+		multiplier = colour.green / (inP->green+1);
+		outP->green = A_u_char(colour.green * multiplier);
+		multiplier = colour.blue / (inP->blue+1);
+		outP->blue = A_u_char(colour.blue * multiplier);
+		outP->alpha = inP->alpha;*/
+
+		if (redChannelB == true) {
+			newR = colour32.red * vibrance;
+		}
+		else {
+			newR = colour32.red;
+		}
+		if (greenChannelB == true) {
+			newG = colour32.green * vibrance;
+		}
+		else {
+			newG = colour32.green;
+		}
+		if (blueChannelB == true) {
+			newB = colour32.blue * vibrance;
+		}
+		else {
+			newB = colour32.blue;
+		}
+
+		convertedPixel.luma = 0.299 * newR + 0.587 * newG + 0.114 * newB;
+		convertedPixel.Pb = (newB - convertedPixel.luma) * 0.565;
+		convertedPixel.Pr = (newR - convertedPixel.luma) * 0.713;
+		convertedPixel.alpha = 1.0;
+
+		outP->red = convertedPixel.Pb;
+		outP->green = convertedPixel.luma;
+		outP->alpha = convertedPixel.Pr;
+
+
+		outP->blue = inP->blue;
+
+	}
+	else {
+		outP->red = inP->red;
+		outP->green = inP->green;
+		outP->blue = inP->blue;
+		outP->alpha = inP->alpha;
+	}
+
+
+
 
 	return err;
 }
@@ -557,6 +747,7 @@ TintFunc16(
 		outP->alpha = inP->alpha;
 	}
 
+
 	return err;
 }
 
@@ -568,6 +759,40 @@ PF_Pixel16 convertColour8To16(PF_Pixel8 inputColour) {
 	outputColour.alpha = inputColour.alpha * 128.498;
 
 	return outputColour;
+}
+
+static PF_Err
+IterateFloat(
+	PF_InData* in_data,
+	long				progress_base,
+	long				progress_final,
+	PF_EffectWorld* src,
+	void* refcon,
+	PF_Err(*pix_fn)(void* refcon, A_long x, A_long y, PF_PixelFloat* in, PF_PixelFloat* out),
+	PF_EffectWorld* dst)
+{
+	PF_Err	err = PF_Err_NONE;
+	char* localSrc, * localDst;
+	localSrc = reinterpret_cast<char*>(src->data);
+	localDst = reinterpret_cast<char*>(dst->data);
+
+	for (int y = progress_base; y < progress_final; y++)
+	{
+		for (int x = 0; x < src->width; x++)
+		{
+			pix_fn(refcon,
+				static_cast<A_long> (x),
+				static_cast<A_long> (y),
+				reinterpret_cast<PF_PixelFloat*>(localSrc),
+				reinterpret_cast<PF_PixelFloat*>(localDst));
+			localSrc += 16;
+			localDst += 16;
+		}
+		localSrc += (src->rowbytes - src->width * 16);
+		localDst += (dst->rowbytes - src->width * 16);
+	}
+
+	return err;
 }
 
 static PF_Err 
@@ -597,45 +822,97 @@ Render (
 	else {
 		giP.fillBGInt = 1;
 	}
-	
-	if (PF_WORLD_IS_DEEP(output)){
-
-		ERR(suites.Iterate16Suite1()->iterate(in_data,
-			0,								// progress base
-			linesL,							// progress final
-			&params[VIBRANCY_INPUT]->u.ld,	// src 
-			NULL,							// area - null for all pixels
-			(void*)&giP,					// refcon - your custom data pointer
-			TintFunc16,				// pixel function pointer
-			output));
 
 
-		ERR(suites.Iterate16Suite1()->iterate(	in_data,
-												0,								// progress base
-												linesL,							// progress final
-												output,	// src 
-												NULL,							// area - null for all pixels
-												(void*)&giP,					// refcon - your custom data pointer
-												GammaFunc16,				// pixel function pointer
-												output));
-	} else {
-		ERR(suites.Iterate8Suite1()->iterate(in_data,
-			0,								// progress base
-			linesL,							// progress final
-			&params[VIBRANCY_INPUT]->u.ld,	// src 
-			NULL,							// area - null for all pixels
-			(void*)&giP,					// refcon - your custom data pointer
-			TintFunc8,				// pixel function pointer
-			output));
+	if (in_data->appl_id != 'PrMr') {
+		if (PF_WORLD_IS_DEEP(output)) {
 
-		ERR(suites.Iterate8Suite1()->iterate(	in_data,
-												0,								// progress base
-												linesL,							// progress final
-												output,	// src 
-												NULL,							// area - null for all pixels
-												(void*)&giP,					// refcon - your custom data pointer
-												GammaFunc8,				// pixel function pointer
-												output));	
+			ERR(suites.Iterate16Suite1()->iterate(in_data,
+				0,								// progress base
+				linesL,							// progress final
+				&params[VIBRANCY_INPUT]->u.ld,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFunc16,				// pixel function pointer
+				output));
+
+
+			//ERR(suites.Iterate16Suite1()->iterate(in_data,
+			//	0,								// progress base
+			//	linesL,							// progress final
+			//	output,	// src 
+			//	NULL,							// area - null for all pixels
+			//	(void*)&giP,					// refcon - your custom data pointer
+			//	GammaFunc16,				// pixel function pointer
+			//	output));
+		}
+		else {
+			ERR(suites.Iterate8Suite1()->iterate(in_data,
+				0,								// progress base
+				linesL,							// progress final
+				&params[VIBRANCY_INPUT]->u.ld,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFunc8,				// pixel function pointer
+				output));
+
+			ERR(suites.Iterate8Suite1()->iterate(in_data,
+				0,								// progress base
+				linesL,							// progress final
+				output,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				GammaFunc8,				// pixel function pointer
+				output));
+		}
+	}
+	else {
+		// definitely is premiere
+		AEFX_SuiteScoper<PF_PixelFormatSuite1> pixelFormatSuite =
+			AEFX_SuiteScoper<PF_PixelFormatSuite1>(in_data,
+				kPFPixelFormatSuite,
+				kPFPixelFormatSuiteVersion1,
+				out_data);
+
+		PrPixelFormat destinationPixelFormat = PrPixelFormat_BGRA_4444_8u;
+
+		pixelFormatSuite->GetPixelFormat(output, &destinationPixelFormat);
+
+		AEFX_SuiteScoper<PF_Iterate8Suite1> iterate8Suite =
+			AEFX_SuiteScoper<PF_Iterate8Suite1>(in_data,
+				kPFIterate8Suite,
+				kPFIterate8SuiteVersion1,
+				out_data);
+
+		switch (destinationPixelFormat)
+		{
+
+		case PrPixelFormat_BGRA_4444_8u:
+			/// good
+			iterate8Suite->iterate(in_data,
+				0,								// progress base
+				output->height,							// progress final
+				&params[VIBRANCY_INPUT]->u.ld,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFuncBGRA8,				// pixel function pointer
+				output);
+
+			break;
+		case PrPixelFormat_VUYA_4444_8u:
+
+			break;
+		case PrPixelFormat_BGRA_4444_32f:
+
+			break;
+		case PrPixelFormat_VUYA_4444_32f:
+			/// good
+			IterateFloat(in_data, 0, output->height, &params[VIBRANCY_INPUT]->u.ld, (void*)&giP, TintFuncVUYA32, output);
+			break;
+		default:
+			//	Return error, because we don't know how to handle the specified pixel type
+			return PF_Err_UNRECOGNIZED_PARAM_TYPE;
+		}
 	}
 
 	return err;
@@ -655,9 +932,9 @@ PF_Err PluginDataEntryFunction(
 	result = PF_REGISTER_EFFECT(
 		inPtr,
 		inPluginDataCallBackPtr,
-		"Vignette", // Name
-		"ADBE Vignette", // Match Name
-		"Sample Plug-ins", // Category
+		"Vibrancy", // Name
+		"NT Vibrancy", // Match Name
+		"NTProductions", // Category
 		AE_RESERVED_INFO); // Reserved Info
 
 	return result;
