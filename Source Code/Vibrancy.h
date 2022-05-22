@@ -53,6 +53,7 @@ typedef short int			int16;
 #include "Param_Utils.h"
 #include "AE_EffectCBSuites.h"
 #include "String_Utils.h"
+#include "Smart_Utils.h"
 #include "AE_GeneralPlug.h"
 #include "AEFX_ChannelDepthTpl.h"
 #include "AEGP_SuiteHandler.h"

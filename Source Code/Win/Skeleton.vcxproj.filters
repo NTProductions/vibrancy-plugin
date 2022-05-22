@@ -79,6 +79,9 @@
     <ClInclude Include="..\Vibrancy_Strings.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Util\AEFX_SuiteHelper.h">
+      <Filter>Supporting code</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp">
@@ -89,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="..\Vibrancy.cpp" />
     <ClCompile Include="..\Vibrancy_Strings.cpp" />
+    <ClCompile Include="..\..\..\Util\Smart_Utils.cpp">
+      <Filter>Supporting code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c">
+      <Filter>Supporting code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\VibrancyPiPL.r">

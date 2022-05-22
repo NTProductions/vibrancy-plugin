@@ -346,6 +346,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Headers\AE_PluginData.h" />
+    <ClInclude Include="..\..\..\Util\AEFX_SuiteHelper.h" />
     <ClInclude Include="..\Vibrancy.h" />
     <ClInclude Include="..\Vibrancy_Strings.h" />
     <ClInclude Include="..\..\..\Headers\A.h" />
@@ -368,8 +369,10 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     <ClInclude Include="..\..\..\Util\String_Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c" />
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp" />
     <ClCompile Include="..\..\..\Util\MissingSuiteError.cpp" />
+    <ClCompile Include="..\..\..\Util\Smart_Utils.cpp" />
     <ClCompile Include="..\Vibrancy.cpp" />
     <ClCompile Include="..\Vibrancy_Strings.cpp" />
   </ItemGroup>

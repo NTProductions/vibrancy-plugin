@@ -76,6 +76,8 @@ GlobalSetup (
 
 	out_data->out_flags =  PF_OutFlag_DEEP_COLOR_AWARE;	// just 16bpc, not 32bpc
 
+	out_data->out_flags2 = PF_OutFlag2_FLOAT_COLOR_AWARE | PF_OutFlag2_SUPPORTS_SMART_RENDER;
+
 	if (in_data->appl_id == 'PrMr') {
 		AEFX_SuiteScoper<PF_PixelFormatSuite1> pixelFormatSuite = AEFX_SuiteScoper<PF_PixelFormatSuite1>(in_data, kPFPixelFormatSuite, kPFPixelFormatSuiteVersion1, out_data);
 
@@ -680,6 +682,78 @@ TintFuncVUYA32(
 }
 
 static PF_Err
+TintFunc32(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel32* inP,
+	PF_Pixel32* outP)
+{
+	PF_Err		err = PF_Err_NONE;
+
+	VibrancyInfo* giP = reinterpret_cast<VibrancyInfo*>(refcon);
+	double gamma = giP->gamma;
+	PF_Pixel32 colour = giP->colour32;
+	double	  vibrance = (giP->vibrance / 100.0);
+
+	A_long	multiplier;
+	bool redChannelB = false;
+	bool greenChannelB = false;
+	bool blueChannelB = false;
+
+	if (isImportantColourChannel8(giP->colour8, 1)) {
+		redChannelB = true;
+	}
+	if (isImportantColourChannel8(giP->colour8, 2)) {
+		greenChannelB = true;
+	}
+	if (isImportantColourChannel8(giP->colour8, 3)) {
+		blueChannelB = true;
+	}
+
+	if (inP->alpha > 0) {
+		/*multiplier = colour.red / (inP->red+1);
+		outP->red = A_u_char(colour.red * multiplier);
+		multiplier = colour.green / (inP->green+1);
+		outP->green = A_u_char(colour.green * multiplier);
+		multiplier = colour.blue / (inP->blue+1);
+		outP->blue = A_u_char(colour.blue * multiplier);
+		outP->alpha = inP->alpha;*/
+
+		if (redChannelB == true) {
+			outP->red = colour.red * vibrance;
+		}
+		else {
+			outP->red = colour.red;
+		}
+		if (greenChannelB == true) {
+			outP->green = colour.green * vibrance;
+		}
+		else {
+			outP->green = colour.green;
+		}
+		if (blueChannelB == true) {
+			outP->blue = colour.blue * vibrance;
+		}
+		else {
+			outP->blue = colour.blue;
+		}
+
+		outP->alpha = inP->alpha;
+
+	}
+	else {
+		outP->red = inP->red;
+		outP->green = inP->green;
+		outP->blue = inP->blue;
+		outP->alpha = inP->alpha;
+	}
+
+
+	return err;
+}
+
+static PF_Err
 TintFunc16(
 	void* refcon,
 	A_long		xL,
@@ -749,6 +823,16 @@ TintFunc16(
 
 
 	return err;
+}
+
+PF_Pixel32 convertColour8To32(PF_Pixel8 inputColour) {
+	PF_Pixel32 outputColour;
+	outputColour.red = inputColour.red / 255.0;
+	outputColour.green = inputColour.green / 255.0;
+	outputColour.blue = inputColour.blue / 255.0;
+	outputColour.alpha = inputColour.alpha / 255.0;
+
+	return outputColour;
 }
 
 PF_Pixel16 convertColour8To16(PF_Pixel8 inputColour) {
@@ -918,6 +1002,211 @@ Render (
 	return err;
 }
 
+static PF_Err
+ActuallyRender(
+	PF_InData* in_data,
+	PF_OutData* out_data,
+	PF_LayerDef* output,
+	PF_EffectWorld* input,
+	PF_ParamDef* params[])
+{
+	PF_Err				err = PF_Err_NONE;
+	PF_Err				err2 = PF_Err_NONE;
+
+	AEGP_SuiteHandler	suites(in_data->pica_basicP);
+
+	PF_PixelFormat format = PF_PixelFormat_INVALID;
+	PF_NewWorldFlags	flags = PF_NewWorldFlag_CLEAR_PIXELS;
+	PF_Boolean			deepB = PF_WORLD_IS_DEEP(output);
+	VibrancyInfo			giP;
+	AEFX_CLR_STRUCT(giP);
+
+	if (deepB) {
+		flags |= PF_NewWorldFlag_DEEP_PIXELS;
+	}
+
+	giP.colour8 = params[VIBRANCY_COLOUR]->u.cd.value;
+	giP.colour16 = convertColour8To16(giP.colour8);
+	giP.colour32 = convertColour8To32(giP.colour8);
+	giP.vibrance = params[VIBRANCY_VIBRANCE]->u.fs_d.value;
+	giP.gamma = params[VIBRANCY_GAMMA]->u.fs_d.value;
+	if (params[VIBRANCY_FILLBG]->u.bd.value == FALSE) {
+		giP.fillBGInt = 0;
+	}
+	else {
+		giP.fillBGInt = 1;
+	}
+
+	PF_WorldSuite2* wsP = NULL;
+	ERR(AEFX_AcquireSuite(in_data,
+		out_data,
+		kPFWorldSuite,
+		kPFWorldSuiteVersion2,
+		"Couldn't load suite.",
+		(void**)&wsP));
+
+	if (!err) {
+		// values reset
+
+		ERR(wsP->PF_GetPixelFormat(input, &format));
+
+		// pixel depth switch
+		switch (format) {
+		case PF_PixelFormat_ARGB128:
+			// 32
+			ERR(suites.IterateFloatSuite1()->iterate(in_data,
+				0,								// progress base
+				input->height,							// progress final
+				input,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFunc32,				// pixel function pointer
+				output));
+			break;
+		case PF_PixelFormat_ARGB64:
+			//16
+			ERR(suites.Iterate16Suite1()->iterate(in_data,
+				0,								// progress base
+				input->height,							// progress final
+				input,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFunc16,				// pixel function pointer
+				output));
+			break;
+		case PF_PixelFormat_ARGB32:
+			// 8
+			ERR(suites.Iterate8Suite1()->iterate(in_data,
+				0,								// progress base
+				input->height,							// progress final
+				input,	// src 
+				NULL,							// area - null for all pixels
+				(void*)&giP,					// refcon - your custom data pointer
+				TintFunc8,				// pixel function pointer
+				output));
+			break;
+		}
+
+	}
+
+
+	ERR2(AEFX_ReleaseSuite(in_data,
+		out_data,
+		kPFWorldSuite,
+		kPFWorldSuiteVersion2,
+		"Coludn't release suite."));
+
+	return err;
+}
+
+static PF_Err
+PreRender(
+	PF_InData* in_data,
+	PF_OutData* out_data,
+	PF_PreRenderExtra* extra)
+{
+	PF_Err err = PF_Err_NONE;
+	PF_ParamDef channel_param;
+	PF_RenderRequest req = extra->input->output_request;
+	PF_CheckoutResult in_result;
+
+	//AEFX_CLR_STRUCT(channel_param);
+
+	AEGP_SuiteHandler suites(in_data->pica_basicP);
+
+
+	// Mix in the background color of the comp, as a demonstration of GuidMixInPtr()
+	// When the background color changes, the effect will need to be rerendered.
+	// Note: This doesn't handle the collapsed comp case
+	// Your effect can use a similar approach to trigger a rerender based on changes beyond just its effect parameters.
+
+	req.channel_mask = PF_ChannelMask_RED | PF_ChannelMask_GREEN | PF_ChannelMask_BLUE;
+	req.preserve_rgb_of_zero_alpha = FALSE;	//	Hey, we dont care.N
+
+	ERR(extra->cb->checkout_layer(in_data->effect_ref,
+		VIBRANCY_INPUT,
+		VIBRANCY_INPUT,
+		&req,
+		in_data->current_time,
+		in_data->time_step,
+		in_data->time_scale,
+		&in_result));
+
+	UnionLRect(&in_result.result_rect, &extra->output->result_rect);
+	UnionLRect(&in_result.max_result_rect, &extra->output->max_result_rect);
+
+	return err;
+}
+
+static PF_Err
+SmartRender(
+	PF_InData* in_data,
+	PF_OutData* out_data,
+	PF_SmartRenderExtra* extra)
+{
+	PF_Err			err = PF_Err_NONE,
+		err2 = PF_Err_NONE;
+
+	PF_EffectWorld* input_worldP = NULL;
+	PF_EffectWorld* output_worldP = NULL;
+
+	PF_ParamDef params[VIBRANCY_NUM_PARAMS];
+	PF_ParamDef* paramsP[VIBRANCY_NUM_PARAMS];
+
+	AEFX_CLR_STRUCT(params);
+
+
+	for (int i = 0; i < VIBRANCY_NUM_PARAMS; i++) {
+		paramsP[i] = &params[i];
+	}
+
+	ERR((extra->cb->checkout_layer_pixels(in_data->effect_ref, VIBRANCY_INPUT, &input_worldP)));
+	ERR(extra->cb->checkout_output(in_data->effect_ref, &output_worldP));
+
+	ERR(PF_CHECKOUT_PARAM(in_data,
+		COLOUR_DISK_ID,
+		in_data->current_time,
+		in_data->time_step,
+		in_data->time_scale,
+		&params[VIBRANCY_COLOUR]));
+
+	ERR(PF_CHECKOUT_PARAM(in_data,
+		VIBRANCE_DISK_ID,
+		in_data->current_time,
+		in_data->time_step,
+		in_data->time_scale,
+		&params[VIBRANCY_VIBRANCE]));
+
+	ERR(PF_CHECKOUT_PARAM(in_data,
+		GAMMA_DISK_ID,
+		in_data->current_time,
+		in_data->time_step,
+		in_data->time_scale,
+		&params[VIBRANCY_GAMMA]));
+
+	ERR(PF_CHECKOUT_PARAM(in_data,
+		FILLBG_DISK_ID,
+		in_data->current_time,
+		in_data->time_step,
+		in_data->time_scale,
+		&params[VIBRANCY_FILLBG]));
+
+
+	ERR(ActuallyRender(in_data,
+		out_data,
+		output_worldP,
+		input_worldP,
+		paramsP));
+
+	ERR2(PF_CHECKIN_PARAM(in_data, &params[VIBRANCY_COLOUR]));
+	ERR2(PF_CHECKIN_PARAM(in_data, &params[VIBRANCY_VIBRANCE]));
+	ERR2(PF_CHECKIN_PARAM(in_data, &params[VIBRANCY_GAMMA]));
+	ERR2(PF_CHECKIN_PARAM(in_data, &params[VIBRANCY_FILLBG]));
+
+	return err;
+
+}
+
 
 extern "C" DllExport
 PF_Err PluginDataEntryFunction(
@@ -984,6 +1273,12 @@ EffectMain(
 								out_data,
 								params,
 								output);
+				break;
+			case PF_Cmd_SMART_PRE_RENDER:
+				err = PreRender(in_data, out_data, (PF_PreRenderExtra*)extra);
+				break;
+			case PF_Cmd_SMART_RENDER:
+				err = SmartRender(in_data, out_data, (PF_SmartRenderExtra*)extra);
 				break;
 		}
 	}

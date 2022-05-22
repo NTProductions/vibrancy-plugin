@@ -1,2 +1,36 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Skeleton.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Skeleton.vcxproj -> C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\NTProductions\Vibrancy.aex
+  Vibrancy.cpp
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(475,28): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(481,32): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(487,30): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(450,9): warning C4101: 'multiplier': unreferenced local variable
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(549,29): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(555,29): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(561,30): warning C4244: '=': conversion from 'double' to 'A_u_char', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(524,9): warning C4101: 'multiplier': unreferenced local variable
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(597,28): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(598,32): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(599,30): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(600,32): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(658,53): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(659,52): warning C4244: '=': conversion from 'PF_FpLong' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(660,52): warning C4244: '=': conversion from 'PF_FpLong' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(613,9): warning C4101: 'multiplier': unreferenced local variable
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(724,27): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(730,31): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(736,29): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(699,9): warning C4101: 'multiplier': unreferenced local variable
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(796,27): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(802,31): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(808,29): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(771,9): warning C4101: 'multiplier': unreferenced local variable
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(830,37): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(831,41): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(832,39): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(833,41): warning C4244: '=': conversion from 'double' to 'PF_FpShort', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(840,37): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(841,41): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(842,39): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(843,41): warning C4244: '=': conversion from 'double' to 'A_u_short', possible loss of data
+G:\Freelancer Projects\Plugins\Learning\AfterEffectsSDK 17.1.2\Examples\NT Productions\Vibrancy\Vibrancy.cpp(1109,14): warning C4101: 'channel_param': unreferenced local variable
+  Skeleton.vcxproj -> C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\NT Productions\Vibrancy.aex

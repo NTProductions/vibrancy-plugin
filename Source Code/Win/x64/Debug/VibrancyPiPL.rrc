@@ -64,7 +64,7 @@ BEGIN
 	"2LGe", /* 'eGL2' */
 	0L,
 	4L,
-	0L, 
+	5120L, 
 
 	"MIB8",
 	"ANMe",/* 'name' PINameProperty */
